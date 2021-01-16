@@ -1,71 +1,88 @@
 package com.example.myscore;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.myscore.dummy.DummyContent.DummyItem;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.myscore.model.Event;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
+public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyViewHolder> {
 
-    ArrayList<Event> favoriteEventList;
-    private Context context;
+    Context context;
+    private ArrayList<Event> listRecyclerItem;
 
-    public FavoriteAdapter(ArrayList<Event> items, Context context) {
-        favoriteEventList = items;
-        this.context = context;
+    public FavoriteAdapter(Context ct, ArrayList<Event> listRecyclerItem) {
+        context = ct;
+        this.listRecyclerItem = listRecyclerItem;
     }
+
+    interface ListItemClickListener {
+        void onListItemClick(int position);
+    }
+
     public void updateData(ArrayList<Event> newData) {
-        favoriteEventList = newData;
+        listRecyclerItem = newData;
+    }
+
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view =  inflater.inflate(R.layout.event_item, parent, false);
+        return new MyViewHolder(view);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_favorite, parent, false);
-        return new ViewHolder(view);
-    }
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Event event = (Event) listRecyclerItem.get(position);
 
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = favoriteEventList.get(position);
-        holder.mIdView.setText(favoriteEventList.get(position).getStrEvent());
-        holder.mContentView.setText(favoriteEventList.get(position).getStrVenue());
+        holder.eventName.setText(event.getStrEvent());
+        holder.eventVenue.setText(event.getStrVenue());
+        holder.eventItem.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailActivity.class);
+
+                intent.putExtra("strEventName", event.getStrEvent());
+                intent.putExtra("idEvent", event.getIdEvent());
+                intent.putExtra("StrThumb", event.getStrThumb());
+                intent.putExtra("IntAwayScore", event.getIntAwayScore());
+                intent.putExtra("IntHomeScore", event.getIntHomeScore());
+                intent.putExtra("StrAwayTeam", event.getStrAwayTeam());
+                intent.putExtra("StrHomeTeam", event.getStrHomeTeam());
+                intent.putExtra("DateEvent", event.getDateEvent());
+                intent.putExtra("StrVenue", event.getStrVenue());
+                intent.putExtra("saved", "true");
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return favoriteEventList.size();
+        return listRecyclerItem.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public Event mItem;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView eventName, eventVenue;
+        CardView eventItem;
 
-        public ViewHolder(View view) {
-            super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            eventName = itemView.findViewById(R.id.title);
+            eventVenue = itemView.findViewById(R.id.venue);
+            eventItem = itemView.findViewById(R.id.item_event);
         }
     }
 }

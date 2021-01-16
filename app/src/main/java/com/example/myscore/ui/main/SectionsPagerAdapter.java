@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.myscore.FavoriteFragment;
 import com.example.myscore.PastFragment;
 import com.example.myscore.R;
 import com.example.myscore.UpcomingFragment;

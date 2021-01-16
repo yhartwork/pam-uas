@@ -72,17 +72,30 @@ public class DatabaseHelper extends SQLiteOpenHelper
         contentValues.put(COL_10,strVenue);
         contentValues.put(COL_11,strThumb);
 
-        long result = db.insert(TABLE_NAME, null, contentValues);
-        if(result == -1)
+        Cursor currentEntry = getSingleData(idEvent);
+
+        if (currentEntry.getCount() == 0) {
+            long result = db.insert(TABLE_NAME, null, contentValues);
+            if(result == -1)
+                return false;
+            else
+                return true;
+        } else {
             return false;
-        else
-            return true;
+        }
+
     }
 
 
     public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery("select * from score_table", null);
+        return res;
+    }
+
+    public Cursor getSingleData(String idEvent) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from score_table where idEvent = " + idEvent, null);
         return res;
     }
 
@@ -108,9 +121,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
     }
 
 
-    public int deleteData (String id) {
+    public int deleteData (String idEvent) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TABLE_NAME, "ID = ?", new String[] {id});
+        return db.delete(TABLE_NAME, "idEvent = ?", new String[] {idEvent});
     }
 
 }

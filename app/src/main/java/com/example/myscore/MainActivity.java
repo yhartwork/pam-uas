@@ -1,6 +1,7 @@
 package com.example.myscore;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.myscore.ui.main.SectionsPagerAdapter;
@@ -31,15 +33,13 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = MainActivity.class.getSimpleName();
 
     private ProgressDialog pDialog;
-    DatabaseHelper myDb;
 
     // URL to get contacts JSON
-    private static String oncomingUrl = "https://www.thesportsdb.com/api/v1/json/1/eventspastleague.php?id=4328";
+    private static String oncomingUrl = "https://www.thesportsdb.com/api/v1/json/1/eventsnextleague.php?id=4328";
     private static String pastUrl = "https://www.thesportsdb.com/api/v1/json/1/eventspastleague.php?id=4328";
 
     ArrayList<Event> oncomingEventList;
     ArrayList<Event> pastEventList;
-    ArrayList<Event> favoriteEventList;
 
     SectionsPagerAdapter sectionsPagerAdapter;
 
@@ -58,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
         oncomingEventList = new ArrayList<>();
         pastEventList = new ArrayList<>();
-        favoriteEventList = new ArrayList<>();
-
-        myDb = new DatabaseHelper(this);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,15 +65,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button btnOpenFav = findViewById(R.id.btn_open_fav);
+        btnOpenFav.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, FavoriteActivity.class);
+                MainActivity.this.startActivity(myIntent);
+            }
+        });
+
         new GetData().execute();
     }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        new GetFavorite().execute();
-    }
-
 
     /**
      * Async task class to get json by making HTTP call
@@ -228,42 +227,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    private class GetFavorite extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            Cursor res = myDb.getAllData();
-            if(res.getCount() == 0) { return null; }
-
-            while (res.moveToNext() ) {
-
-                // tmp hash map for single event
-                Event event = new Event();
-
-                // adding each child node to model
-                event.setIdEvent(res.getString(1));
-                event.setStrEvent(res.getString(2));
-                event.setStrHomeTeam(res.getString(3));
-                event.setStrAwayTeam(res.getString(4));
-                event.setIntHomeScore(res.getString(5));
-                event.setIntAwayScore(res.getString(6));
-                event.setDateEvent(res.getString(7));
-                event.setStrTime(res.getString(8));
-                event.setStrVenue(res.getString(9));
-                event.setStrThumb(res.getString(10));
-
-                // adding contact to contact list
-                favoriteEventList.add(event);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            // update the list in favorite
-        }
-
-    }
-
 }

@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40pt"
-    android:orientation="vertical"
-    android:padding="2pt">
+    android:layout_height="50pt"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/item_event"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:elevation="2dp"
-        app:cardBackgroundColor="#E4E4E4"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:elevation="3dp"
+        app:cardBackgroundColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,24 +22,40 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/item_number"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/content"
+                android:id="@+id/venue"
                 android:layout_width="0dp"
-                android:layout_height="23dp"
-                android:layout_margin="@dimen/text_margin"
+                android:layout_height="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Venue"
                 android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="#616161"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/item_number" />
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Date"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/venue"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

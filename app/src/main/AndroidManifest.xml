@@ -11,10 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyScore">
+        <activity android:name=".FavoriteActivity"></activity>
         <activity
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
-            android:theme="@style/Theme.MyScore.NoActionBar"></activity>
+            android:theme="@style/Theme.MyScore.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
